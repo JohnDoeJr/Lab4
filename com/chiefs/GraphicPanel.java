@@ -32,8 +32,8 @@ public class GraphicPanel extends JPanel {
 		Graphics2D g2 = (Graphics2D) g;
 		g2.setColor(YELLOW);
 		g2.fillRect(0, 0, getWidth(), getHeight());
-
 		g2.setColor(BLUE);
+		
 		// draw rectangle
 		g2.fill(new Rectangle2D.Double(HORIZONTAL_CENTER - forme.getRadius() / 2, 
 				VERTICAL_CENTER - forme.getRadius(),

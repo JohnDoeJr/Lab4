@@ -17,7 +17,14 @@ public class Window extends JFrame implements ActionListener {
 
 	private GraphicPanel graphicArea;
 	private JList axisXSetter;
-	private JRadioButton axisYSetter;
+	
+	//Zero OOP here:
+	private ButtonGroup axisYButtonGroup;
+	private JRadioButton axisYSetter1;
+	private JRadioButton axisYSetter2;
+	private JRadioButton axisYSetter3;
+	private JRadioButton axisYSetter4;
+	
 	private JSpinner radiusSetter;
 	private JLabel pointLabel;
 	
@@ -37,17 +44,23 @@ public class Window extends JFrame implements ActionListener {
 		graphicArea.setPreferredSize(new Dimension(300, 200));
 		add(graphicArea);
 		
-		//Change flow layout to grid layout
-		JPanel userControls = new JPanel(new FlowLayout());
-		//Not so easy, bitch
-		axisXSetter = new JList();
-		axisYSetter = new JRadioButton();
-		radiusSetter = new JSpinner();
-		pointLabel = new JLabel("Point here");
+		JPanel userControls = new JPanel(new GridLayout(1, 4));
+		
+		//Setting 
+		Object[] data = {0, -5, 3, 20};
+		axisXSetter = new JList(data);
+		axisXSetter.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		userControls.add(axisXSetter);
-		userControls.add(axisYSetter);
+		
+		//SCREW Y
+		
+		SpinnerModel model = new SpinnerNumberModel(forme.getRadius(), 1, 100, 1);
+		radiusSetter = new JSpinner(model);
 		userControls.add(radiusSetter);
-		userControls.add(pointLabel);		
+		
+		pointLabel = new JLabel("Point here");
+		userControls.add(pointLabel);
+		
 		add(userControls);
 		
 		pack();
