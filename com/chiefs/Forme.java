@@ -21,7 +21,7 @@ public class Forme {
 		double y = nokta.getY();
 
 		return (x < 0 && y < 0 && Double.compare(x + y, -radius / 2) > 0)
-				|| (x < 0 && y > 0 && Double.compare(x, -radius / 2) < 0 && Double.compare(y, radius) < 0)
+				|| (x < 0 && y > 0 && Double.compare(x, -radius / 2) > 0 && Double.compare(y, radius) < 0)
 				|| (x > 0 && y < 0 && Double.compare(Math.sqrt(x * x + y * y), radius / 2) < 0)
 				|| (x == 0 && y < 0 && Double.compare(y, radius / 2) < 0)
 				|| (y == 0 && x < 0 && Double.compare(x, radius / 2) < 0);
