@@ -1,5 +1,6 @@
 package com.chiefs;
 
+import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
@@ -7,24 +8,31 @@ import java.awt.event.*;
 import java.util.*;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import javax.swing.event.*;
-public class Window extends JFrame implements ActionListener, ChangeListener, ListSelectionListener {
+public class Window extends JFrame implements ActionListener, ChangeListener {
 
+	private static final int GRAPHIC_WIDTH = 600;
+	private static final int GRAPHIC_HEIGHT = 400;
+	private static final int HORIZONTAL_CENTER = 300;
+	private static final int VERTICAL_CENTER = 200;
 	private static final int ROWS_NUMBER = 1; 
-	private static final int COLS_NUMBER = 4;
+	private static final int COLS_NUMBER = 5;
 
 	private Forme forme;
 
 	private GraphicPanel graphicArea;
-	private JList axisXSetter;
+	private JList axisXList;
 	
 	private ButtonGroup axisYButtonGroup;
-	private JRadioButton axisYSetter1;
-	private JRadioButton axisYSetter2;
-	private JRadioButton axisYSetter3;
-	private JRadioButton axisYSetter4;
+	private JRadioButton axisYRadioButton1;
+	private JRadioButton axisYRadioButton2;
+	private JRadioButton axisYRadioButton3;
+	private JRadioButton axisYRadioButton4;
 	
-	private JSpinner radiusSetter;
+	private JButton addPointButton;
+	
+	private JSpinner radiusSpinner;
 	private JLabel pointLabel;
 	
 	private List<Nokta> points;
@@ -39,97 +47,122 @@ public class Window extends JFrame implements ActionListener, ChangeListener, Li
 		setTitle("Laba 4");
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		
-		setLayout(new FlowLayout());
+		setLayout(new BorderLayout());
 		
 		graphicArea = new GraphicPanel(forme, points);		
-		graphicArea.setPreferredSize(new Dimension(600, 400));
+		graphicArea.setPreferredSize(new Dimension(GRAPHIC_WIDTH, GRAPHIC_HEIGHT));
 		
 		graphicArea.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
-				Nokta point = new Nokta(e.getX() - 300, 200 - e.getY());
-				points.add(point);
-				pointLabel.setText(point.toString());
-				if (forme.test(point)) {
-					graphicArea.repaint();
-				} else {
-					DrawingThread drawingThread = new DrawingThread(graphicArea);
-					drawingThread.start();
-				}
+				addPoint(e.getX(), e.getY(), false);
 			}
 		});
 		
-		add(graphicArea);
+		add(graphicArea, BorderLayout.CENTER);
 		
 		JPanel userControls = new JPanel(new GridLayout(ROWS_NUMBER, COLS_NUMBER));
-		
+		userControls.setPreferredSize(new Dimension(600, 80));
 		//Setting x
-		Object[] data = {0, -5, 3, 20};
-		axisXSetter = new JList(data);
-		axisXSetter.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		axisXSetter.addListSelectionListener(this);
-		axisXSetter.setLayout(new FlowLayout());
-		userControls.add(axisXSetter);
+		Object[] data = {0f, -5f, 3f, 20f};
+		axisXList = new JList(data);
+		axisXList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);		
+		axisXList.setLayout(new FlowLayout());
+		userControls.add(axisXList);
 		
 		//Setting y
-		axisYSetter1 = new JRadioButton("0");
-		axisYSetter1.setActionCommand("0");
-		axisYSetter1.addActionListener(this);
+		axisYRadioButton1 = new JRadioButton("0");		
 		
-		axisYSetter2 = new JRadioButton("20");
-		axisYSetter2.setActionCommand("20");
-		axisYSetter2.addActionListener(this);
+		axisYRadioButton2 = new JRadioButton("20");		
 		
-		axisYSetter3 = new JRadioButton("-40");
-		axisYSetter3.setActionCommand("-40");
-		axisYSetter3.addActionListener(this);
+		axisYRadioButton3 = new JRadioButton("-40");		
 		
-		axisYSetter4 = new JRadioButton("30");
-		axisYSetter4.setActionCommand("30");
-		axisYSetter4.addActionListener(this);
+		axisYRadioButton4 = new JRadioButton("30");		
 		
 		axisYButtonGroup = new ButtonGroup();
-		axisYButtonGroup.add(axisYSetter1);
-		axisYButtonGroup.add(axisYSetter2);
-		axisYButtonGroup.add(axisYSetter3);
-		axisYButtonGroup.add(axisYSetter4);
+		axisYButtonGroup.add(axisYRadioButton1);
+		axisYButtonGroup.add(axisYRadioButton2);
+		axisYButtonGroup.add(axisYRadioButton3);
+		axisYButtonGroup.add(axisYRadioButton4);
 		
 		JPanel axisYSetterPanel = new JPanel(new FlowLayout());
 		
-		axisYSetterPanel.add(axisYSetter1);
-		axisYSetterPanel.add(axisYSetter2);
-		axisYSetterPanel.add(axisYSetter3);
-		axisYSetterPanel.add(axisYSetter4);
+		axisYSetterPanel.add(axisYRadioButton1);
+		axisYSetterPanel.add(axisYRadioButton2);
+		axisYSetterPanel.add(axisYRadioButton3);
+		axisYSetterPanel.add(axisYRadioButton4);
 		userControls.add(axisYSetterPanel);
+		
+		//Setting add point button
+		addPointButton = new JButton("Add");
+		addPointButton.setBorder(new EmptyBorder(15, 20, 20, 20));
+		addPointButton.addActionListener(this);
+		JPanel kostylPanel = new JPanel(new FlowLayout());
+		kostylPanel.add(addPointButton);
+		userControls.add(kostylPanel);
 		
 		//Setting radius
 		SpinnerModel model = new SpinnerNumberModel(forme.getRadius(), 50f, 200f, 1f);
-		radiusSetter = new JSpinner(model);
-		radiusSetter.addChangeListener(this);
-		userControls.add(radiusSetter);
+		radiusSpinner = new JSpinner(model);
+		radiusSpinner.addChangeListener(this);
+		userControls.add(radiusSpinner);
 		
 		pointLabel = new JLabel("Point here");
 		userControls.add(pointLabel);
 		
-		add(userControls);	
+		add(userControls, BorderLayout.SOUTH);	
 		
 		pack();
 	}
-
+	
+	private void addPoint(float x, float y, boolean fromUserControls) {
+		Nokta point;
+		if (fromUserControls) {
+			point = new Nokta(x, y);
+		} else {
+			point = new Nokta(x - HORIZONTAL_CENTER, VERTICAL_CENTER - y);
+		}
+		points.add(point);
+		pointLabel.setText(point.toString());
+		if (forme.test(point)) {
+			graphicArea.repaint();
+		} else {
+			DrawingThread drawingThread = new DrawingThread(graphicArea);
+			drawingThread.start();
+		}
+	}
+	
 	@Override
 	public void actionPerformed(ActionEvent event) {
 		
+		float tmpAxisX;
+		float tmpAxisY = 0;
+		boolean radioIsSelected = false;
+		
+		if (axisXList.getSelectedIndex() == -1) {
+			return;
+		} else {
+			tmpAxisX = (Float) axisXList.getSelectedValue();
+		}
+		
+		for (Enumeration<AbstractButton> buttons = axisYButtonGroup.getElements(); buttons.hasMoreElements();) {
+			AbstractButton button = buttons.nextElement();
+			
+			if (button.isSelected()) {
+				tmpAxisY = Float.valueOf(button.getText());
+				radioIsSelected = true;
+			}
+		}
+		
+		if (radioIsSelected) {
+			addPoint(tmpAxisX, tmpAxisY, true);
+		}
 	}
 
 	@Override
 	public void stateChanged(ChangeEvent e) {
-		forme.setRadius((float) (double) (Double) radiusSetter.getValue());
+		forme.setRadius((float) (double) (Double) radiusSpinner.getValue());
 		graphicArea.repaint();
-	}
-
-	@Override
-	public void valueChanged(ListSelectionEvent e) {		
-		
-	}
+	}	
 }
 
 class DrawingThread extends Thread {
