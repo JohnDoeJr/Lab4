@@ -17,8 +17,8 @@ public class Forme {
 	}
 
 	public boolean test(Nokta nokta) {
-		double x = nokta.getX();
-		double y = nokta.getY();
+		double x = nokta.getAxisX();
+		double y = nokta.getAxisY();
 
 		return (x < 0 && y < 0 && Double.compare(x + y, -radius / 2) > 0)
 				|| (x < 0 && y > 0 && Double.compare(x, -radius / 2) > 0 && Double.compare(y, radius) < 0)

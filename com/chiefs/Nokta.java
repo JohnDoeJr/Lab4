@@ -3,17 +3,17 @@ package com.chiefs;
 public class Nokta {
 	private final double x;
 	private final double y;
-
+	
 	public Nokta(double x, double y) {
 		this.x = x;
 		this.y = y;
 	}
 
-	public double getY() {
+	public double getAxisY() {
 		return y;
 	}
 
-	public double getX() {
+	public double getAxisX() {
 		return x;
 	}
 	
@@ -28,7 +28,7 @@ public class Nokta {
 			return false;
 		} else {
 			Nokta nokta = (Nokta) o;
-			return (Double.compare(x, nokta.getX()) == 0) && (Double.compare(y, nokta.getY()) == 0);
+			return (Double.compare(x, nokta.getAxisX()) == 0) && (Double.compare(y, nokta.getAxisY()) == 0);
 		}
 	}
 	

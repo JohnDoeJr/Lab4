@@ -6,6 +6,7 @@ public class Main {
 
 		Forme forme = new Forme(150);
 		Window window = new Window(forme);
+		window.setVisible(true);
 	}
 
 }

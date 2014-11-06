@@ -3,20 +3,11 @@ package com.chiefs;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.util.ArrayList;
-import java.util.List;
+import java.awt.event.*;
+import java.util.*;
 
 import javax.swing.*;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-
+import javax.swing.event.*;
 public class Window extends JFrame implements ActionListener, ChangeListener, ListSelectionListener {
 
 	private static final int ROWS_NUMBER = 1; 
@@ -57,8 +48,13 @@ public class Window extends JFrame implements ActionListener, ChangeListener, Li
 			public void mouseClicked(MouseEvent e) {
 				Nokta point = new Nokta(e.getX() - 300, 200 - e.getY());
 				points.add(point);
-				pointLabel.setText(point.toString());				
-				graphicArea.repaint();
+				pointLabel.setText(point.toString());
+				if (forme.test(point)) {
+					graphicArea.repaint();
+				} else {
+					DrawingThread drawingThread = new DrawingThread(graphicArea);
+					drawingThread.start();
+				}
 			}
 		});
 		
@@ -105,6 +101,7 @@ public class Window extends JFrame implements ActionListener, ChangeListener, Li
 		axisYSetterPanel.add(axisYSetter4);
 		userControls.add(axisYSetterPanel);
 		
+		//Setting radius
 		SpinnerModel model = new SpinnerNumberModel(forme.getRadius(), 50f, 200f, 1f);
 		radiusSetter = new JSpinner(model);
 		radiusSetter.addChangeListener(this);
@@ -116,8 +113,6 @@ public class Window extends JFrame implements ActionListener, ChangeListener, Li
 		add(userControls);	
 		
 		pack();
-		
-		setVisible(true);
 	}
 
 	@Override
@@ -134,5 +129,19 @@ public class Window extends JFrame implements ActionListener, ChangeListener, Li
 	@Override
 	public void valueChanged(ListSelectionEvent e) {		
 		
+	}
+}
+
+class DrawingThread extends Thread {
+	
+	private GraphicPanel panel;
+	
+	public DrawingThread(GraphicPanel panel) {
+		this.panel = panel;
+	}
+	
+	@Override
+	public void run() {
+		panel.redraw();
 	}
 }
