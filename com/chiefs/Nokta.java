@@ -39,7 +39,6 @@ public class Nokta {
 		result = 31 * result + (int) Double.doubleToLongBits(y);
 		
 		return result;
-	}
-	
+	}	
 }
 
