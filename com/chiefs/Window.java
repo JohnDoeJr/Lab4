@@ -54,7 +54,8 @@ public class Window extends JFrame implements ActionListener, ChangeListener {
 		
 		graphicArea.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
-				addPoint(e.getX(), e.getY(), false);
+				Nokta point = new Nokta(e.getX() - HORIZONTAL_CENTER, VERTICAL_CENTER - e.getY());
+				addPoint(point);
 			}
 		});
 		
@@ -114,13 +115,7 @@ public class Window extends JFrame implements ActionListener, ChangeListener {
 		pack();
 	}
 	
-	private void addPoint(float x, float y, boolean fromUserControls) {
-		Nokta point;
-		if (fromUserControls) {
-			point = new Nokta(x, y);
-		} else {
-			point = new Nokta(x - HORIZONTAL_CENTER, VERTICAL_CENTER - y);
-		}
+	private void addPoint(Nokta point) {		
 		points.add(point);
 		pointLabel.setText(point.toString());
 		if (forme.test(point)) {
@@ -154,7 +149,8 @@ public class Window extends JFrame implements ActionListener, ChangeListener {
 		}
 		
 		if (radioIsSelected) {
-			addPoint(tmpAxisX, tmpAxisY, true);
+			Nokta point = new Nokta(tmpAxisX, tmpAxisY);
+			addPoint(point);
 		}
 	}
 

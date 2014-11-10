@@ -68,6 +68,7 @@ public class GraphicPanel extends JPanel {
 		g2.drawLine(getWidth(), (int) VERTICAL_CENTER, getWidth() - 7, (int) (VERTICAL_CENTER - 7));
 		g2.drawString("R/2", HORIZONTAL_CENTER + forme.getRadius() / 2, VERTICAL_CENTER - 10);
 		g2.drawString("-R/2", HORIZONTAL_CENTER - forme.getRadius() / 2, VERTICAL_CENTER - 10);
+		g2.drawString("X", getWidth() - 10, VERTICAL_CENTER + 19);
 		
 		//Draw axis Y
 		g2.drawLine((int) HORIZONTAL_CENTER, 0, (int) HORIZONTAL_CENTER, getHeight());
@@ -75,6 +76,7 @@ public class GraphicPanel extends JPanel {
 		g2.drawLine((int) HORIZONTAL_CENTER, 0, (int) HORIZONTAL_CENTER + 7, 10);
 		g2.drawString("R", HORIZONTAL_CENTER + 10, VERTICAL_CENTER - forme.getRadius());
 		g2.drawString("-R/2", HORIZONTAL_CENTER + 10, VERTICAL_CENTER + forme.getRadius() / 2);
+		g2.drawString("Y", HORIZONTAL_CENTER + 10, 15);
 	}
 	
 	private void drawPoint(Nokta point, Graphics2D g2, int radius) {
