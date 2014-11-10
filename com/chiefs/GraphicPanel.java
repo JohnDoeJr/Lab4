@@ -33,7 +33,8 @@ public class GraphicPanel extends JPanel {
 
 	private void draw(Graphics g) {
 		drawForme(g);
-
+		drawAxes(g);
+		
 		Graphics2D g2 = (Graphics2D) g;
 		
 		if (points.size() > 0) {
@@ -56,6 +57,24 @@ public class GraphicPanel extends JPanel {
 				drawPoint(point, g2, STANDARD_RADIUS + counter);
 			}
 		}
+	}
+	
+	private void drawAxes(Graphics g) {
+		Graphics2D g2 = (Graphics2D) g;
+		g2.setColor(Color.BLACK);
+		//Draw axis X
+		g2.drawLine(0, (int) VERTICAL_CENTER, getWidth(), (int) VERTICAL_CENTER);
+		g2.drawLine(getWidth(), (int) VERTICAL_CENTER, getWidth() - 7, (int) (VERTICAL_CENTER + 7));
+		g2.drawLine(getWidth(), (int) VERTICAL_CENTER, getWidth() - 7, (int) (VERTICAL_CENTER - 7));
+		g2.drawString("R/2", HORIZONTAL_CENTER + forme.getRadius() / 2, VERTICAL_CENTER - 10);
+		g2.drawString("-R/2", HORIZONTAL_CENTER - forme.getRadius() / 2, VERTICAL_CENTER - 10);
+		
+		//Draw axis Y
+		g2.drawLine((int) HORIZONTAL_CENTER, 0, (int) HORIZONTAL_CENTER, getHeight());
+		g2.drawLine((int) HORIZONTAL_CENTER, 0, (int) HORIZONTAL_CENTER - 7, 10);
+		g2.drawLine((int) HORIZONTAL_CENTER, 0, (int) HORIZONTAL_CENTER + 7, 10);
+		g2.drawString("R", HORIZONTAL_CENTER + 10, VERTICAL_CENTER - forme.getRadius());
+		g2.drawString("-R/2", HORIZONTAL_CENTER + 10, VERTICAL_CENTER + forme.getRadius() / 2);
 	}
 	
 	private void drawPoint(Nokta point, Graphics2D g2, int radius) {
